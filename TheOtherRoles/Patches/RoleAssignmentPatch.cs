@@ -435,7 +435,8 @@ namespace TheOtherRoles.Patches {
                 RoleId.Vip,
                 RoleId.Invert,
                 RoleId.Chameleon,
-                RoleId.Shifter
+                RoleId.Shifter,
+                RoleId.AllKnowing
             });
 
             if (rnd.Next(1, 101) <= CustomOptionHolder.modifierLover.getSelection() * 10) { // Assign lover
@@ -576,6 +577,19 @@ namespace TheOtherRoles.Patches {
                 }
                 modifiers.RemoveAll(x => x == RoleId.Sunglasses);
             }
+            if (modifiers.Contains(RoleId.AllKnowing)) {
+                int assignedcount = 0;
+                List<PlayerControl> imps = new List<PlayerControl>(playerList);
+                imps.RemoveAll(x => !x.Data.Role.IsImpostor || RoleInfo.getRoleInfoForPlayer(x).Any(r => r.isNeutral));
+                while (assignedcount < modifiers.FindAll(x => x == RoleId.AllKnowing).Count) {
+                    playerId = setModifierToRandomPlayer((byte)RoleId.AllKnowing, imps);
+                    crewPlayer.RemoveAll(x => x.PlayerId == playerId);
+                    playerList.RemoveAll(x => x.PlayerId == playerId);
+                    imps.RemoveAll(x => x.PlayerId == playerId);
+                    assignedcount++;
+                }
+                modifiers.RemoveAll(x => x == RoleId.AllKnowing);
+            }
 
             foreach (RoleId modifier in modifiers) {
                 if (playerList.Count == 0) break;
@@ -620,6 +634,10 @@ namespace TheOtherRoles.Patches {
                 case RoleId.Chameleon:
                     selection = CustomOptionHolder.modifierChameleon.getSelection();
                     if (multiplyQuantity) selection *= CustomOptionHolder.modifierChameleonQuantity.getQuantity();
+                    break;
+                case RoleId.AllKnowing:
+                    selection = CustomOptionHolder.modifierAllknowing.getSelection();
+                    if (multiplyQuantity) selection *= CustomOptionHolder.modifierAllknowingQuantity.getQuantity();
                     break;
                 case RoleId.Shifter:
                     selection = CustomOptionHolder.modifierShifter.getSelection(); break;

@@ -72,6 +72,7 @@ namespace TheOtherRoles
             Vip.clearAndReload();
             Invert.clearAndReload();
             Chameleon.clearAndReload();
+            AllKnowing.clearAndReload();
 
             // Gamemodes
             HandleGuesser.clearAndReload();
@@ -1779,6 +1780,18 @@ namespace TheOtherRoles
             reportDelayMax = CustomOptionHolder.modifierBaitReportDelayMax.getFloat();
             if (reportDelayMin > reportDelayMax) reportDelayMin = reportDelayMax;
             showKillFlash = CustomOptionHolder.modifierBaitShowKillFlash.getBool();
+        }
+    }
+
+    public static class AllKnowing {
+
+        public static Dictionary<PlayerControl, Arrow> AliveCrew = new();
+
+        public static List<PlayerControl> Allknowers = new();
+
+        public static void clearAndReload() {
+            AliveCrew.Clear();
+            Allknowers.Clear();
         }
     }
 

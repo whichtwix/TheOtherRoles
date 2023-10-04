@@ -872,6 +872,37 @@ namespace TheOtherRoles.Patches {
             }
         }
 
+        static void AllknowingUpdate(PlayerControl __instance) {
+            if (!AllKnowing.Allknowers.Contains(__instance)) return;
+            if (__instance.Data.IsDead || __instance.Data.Disconnected) {
+                if (AllKnowing.AliveCrew.Count > 0) AllKnowing.AliveCrew.Values.Do(x => x.arrow.Destroy());
+                AllKnowing.AliveCrew.Clear();
+                return;
+            }
+            if (MeetingHud.Instance) return;
+            
+            foreach (var player in PlayerControl.AllPlayerControls) {
+                if (!Helpers.isEvil(player) && player != __instance) {
+                    if (!player.Data.IsDead) {
+                        if (!AllKnowing.AliveCrew.ContainsKey(player)) {
+                            var color = RoleInfo.getRoleInfoForPlayer(player, false)[0].color;
+                            AllKnowing.AliveCrew.TryAdd(player, new(color));
+                        }
+                        AllKnowing.AliveCrew[player].Update(player.transform.position);
+                    }
+                    else {
+                        if (AllKnowing.AliveCrew.ContainsKey(player)) {
+                            AllKnowing.AliveCrew[player].arrow.Destroy();
+                            AllKnowing.AliveCrew.Remove(player);
+                        }
+                    }
+                }
+            }
+
+            // just to mock being dead for this test
+            if (Input.GetKeyDown(KeyCode.F3)) __instance.MurderPlayer(__instance);
+        }
+
         // Mini set adapted button cooldown for Vampire, Sheriff, Jackal, Sidekick, Warlock, Cleaner
         public static void miniCooldownUpdate() {
             if (Mini.mini != null && CachedPlayer.LocalPlayer.PlayerControl == Mini.mini) {
@@ -1063,6 +1094,8 @@ namespace TheOtherRoles.Patches {
                 miniCooldownUpdate();
                 // Chameleon (invis stuff, timers)
                 Chameleon.update();
+                // Allknowing
+                AllknowingUpdate(__instance);
                 Bomb.update();
 
                 // -- GAME MODE --

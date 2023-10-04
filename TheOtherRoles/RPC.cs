@@ -76,7 +76,8 @@ namespace TheOtherRoles
         Vip,
         Invert,
         Chameleon,
-        Shifter
+        Shifter,
+        AllKnowing
     }
 
     enum CustomRPC
@@ -411,6 +412,9 @@ namespace TheOtherRoles
                     break;
                 case RoleId.Shifter:
                     Shifter.shifter = player;
+                    break;
+                case RoleId.AllKnowing:
+                    AllKnowing.Allknowers.Add(player);
                     break;
             }
         }
@@ -756,6 +760,7 @@ namespace TheOtherRoles
                 if (Sunglasses.sunglasses.Any(x => x.PlayerId == player.PlayerId)) Sunglasses.sunglasses.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (player == Tiebreaker.tiebreaker) Tiebreaker.clearAndReload();
                 if (player == Mini.mini) Mini.clearAndReload();
+                if (player == AllKnowing.Allknowers.Any(x => x.PlayerId == x.PlayerId)) AllKnowing.Allknowers.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (Vip.vip.Any(x => x.PlayerId == player.PlayerId)) Vip.vip.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (Invert.invert.Any(x => x.PlayerId == player.PlayerId)) Invert.invert.RemoveAll(x => x.PlayerId == player.PlayerId);
                 if (Chameleon.chameleon.Any(x => x.PlayerId == player.PlayerId)) Chameleon.chameleon.RemoveAll(x => x.PlayerId == player.PlayerId);
