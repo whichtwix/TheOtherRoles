@@ -879,7 +879,8 @@ namespace TheOtherRoles.Patches {
                 AllKnowing.AliveCrew.Clear();
                 return;
             }
-            if (MeetingHud.Instance) return;
+            // IsIntroDisplayed is actually treated as IsIntroDisplaying
+            if (MeetingHud.Instance || HudManager.Instance.IsIntroDisplayed) return;
             
             foreach (var player in PlayerControl.AllPlayerControls) {
                 if (!Helpers.isEvil(player) && player != __instance) {
